@@ -538,7 +538,7 @@ function App() {
             />
           </View>
         ) : (
-          <Route isFatch={true} />
+          <Route isFatch={route} />
         )}
       </NavigationContainer>
     </StoreProvider>
