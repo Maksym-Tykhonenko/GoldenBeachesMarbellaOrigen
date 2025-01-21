@@ -40,13 +40,13 @@ function App() {
   const [appsUid, setAppsUid] = useState(null);
   const [sab1, setSab1] = useState();
   const [pid, setPid] = useState();
-  console.log('appsUid==>', appsUid);
-  console.log('sab1==>', sab1);
-  console.log('pid==>', pid);
+  //console.log('appsUid==>', appsUid);
+  //console.log('sab1==>', sab1);
+  //console.log('pid==>', pid);
   const [customerUserId, setCustomerUserId] = useState(null);
-  console.log('customerUserID==>', customerUserId);
+  //console.log('customerUserID==>', customerUserId);
   const [idfv, setIdfv] = useState();
-  console.log('idfv==>', idfv);
+  //console.log('idfv==>', idfv);
   /////////Atributions
   const [adServicesAtribution, setAdServicesAtribution] = useState(null);
   //const [adServicesKeywordId, setAdServicesKeywordId] = useState(null);

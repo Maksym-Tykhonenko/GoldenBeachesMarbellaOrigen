@@ -76,6 +76,7 @@ const GoldenBeachesMarbellaProdactScreen = ({navigation, route}) => {
     'nl-snsbank-sign://',
     'nl-asnbank-sign://',
     'triodosmobilebanking',
+    'revolut',
   ];
 
   //**івент push_subscribe
@@ -175,8 +176,8 @@ const GoldenBeachesMarbellaProdactScreen = ({navigation, route}) => {
 
   const handleNavigationStateChange = navState => {
     const {url} = navState;
-    //console.log('NavigationState: ', navState);
-    //console.log('navState: ', navState);
+    const {mainDocumentURL} = navState;
+    console.log('NavigationState: ', navState);
     if (
       url.includes(
         'https://api.paymentiq.io/paymentiq/api/piq-redirect-assistance',
@@ -223,12 +224,17 @@ const GoldenBeachesMarbellaProdactScreen = ({navigation, route}) => {
       //Linking.openURL(url);
       //return false;
       return; // Дозволити навігацію для цих URL-адрес
+    } else if (mainDocumentURL === 'https://winspirit.best/') {
+      // Умова для ввімкнення/вимкнення onOpenWindow
+      setEnableOnOpenWindow(true);
+    } else {
+      setEnableOnOpenWindow(false);
     }
   };
 
   const onShouldStartLoadWithRequest = event => {
     const {url} = event;
-    //console.log('onShouldStartLoadWithRequest========> ', event);
+    console.log('onShouldStartLoadWithRequest========> ', event);
 
     if (url.startsWith('mailto:')) {
       Linking.openURL(url);
@@ -351,6 +357,14 @@ const GoldenBeachesMarbellaProdactScreen = ({navigation, route}) => {
 
     return true;
   };
+  ////////////////////////////
+  const [enableOnOpenWindow, setEnableOnOpenWindow] = useState(false); // Стан для управління onOpenWindow
+
+  const onOpenWindow = syntheticEvent => {
+    const {nativeEvent} = syntheticEvent;
+    const {targetUrl} = nativeEvent;
+    console.log('nativeEvent', nativeEvent);
+  };
 
   //ф-ція для повернення назад
   const goBackBtn = () => {
@@ -421,35 +435,8 @@ const GoldenBeachesMarbellaProdactScreen = ({navigation, route}) => {
         source={{
           uri: product,
         }}
-        onOpenWindow={syntheticEvent => {
-          const {nativeEvent} = syntheticEvent;
-          const {targetUrl} = nativeEvent;
-          //console.log('syntheticEvent==>', syntheticEvent);
-          console.log('nativeEvent', nativeEvent);
-          {
-            /** 
-          //console.log('targetUrl', targetUrl);
-          if (nativeEvent.targetUrl === 'https://pay.neosurf.com/') {
-            //console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
-            //Linking.openURL('https://www.eneba.com/checkout/payment');
-            refWebview.current.injectJavaScript(
-              `window.location.href = 'https://www.myneosurf.com/en_GB/application/login/client'`,
-            );
-            return false;
-          } else if (
-            nativeEvent.targetUrl.includes(
-              'https://checkout.payop.com/en/payment/invoice-preprocessing/',
-            )
-          ) {
-            //console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
-            //Linking.openURL('https://www.eneba.com/checkout/payment');
-            refWebview.current.injectJavaScript(
-              `window.location.href = '${nativeEvent.targetUrl}'`,
-            );
-            return false;
-          }*/
-          }
-        }}
+        // Умова: додаємо onOpenWindow тільки якщо enableOnOpenWindow === true
+        {...(enableOnOpenWindow ? {onOpenWindow: onOpenWindow} : {})}
         onError={syntheticEvent => {
           const {nativeEvent} = syntheticEvent;
           const url = nativeEvent.url;
@@ -511,5 +498,34 @@ const GoldenBeachesMarbellaProdactScreen = ({navigation, route}) => {
     </SafeAreaView>
   );
 };
+{
+  /** 
+onOpenWindow={syntheticEvent => {
+          const {nativeEvent} = syntheticEvent;
+          const {targetUrl} = nativeEvent;
+          //console.log('syntheticEvent==>', syntheticEvent);
+          console.log('nativeEvent', nativeEvent);
 
+          //console.log('targetUrl', targetUrl);
+          if (nativeEvent.targetUrl === 'https://pay.neosurf.com/') {
+            //console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
+            //Linking.openURL('https://www.eneba.com/checkout/payment');
+            refWebview.current.injectJavaScript(
+              `window.location.href = 'https://www.myneosurf.com/en_GB/application/login/client'`,
+            );
+            return false;
+          } else if (
+            nativeEvent.targetUrl.includes(
+              'https://checkout.payop.com/en/payment/invoice-preprocessing/',
+            )
+          ) {
+            //console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
+            //Linking.openURL('https://www.eneba.com/checkout/payment');
+            refWebview.current.injectJavaScript(
+              `window.location.href = '${nativeEvent.targetUrl}'`,
+            );
+            return false;
+          }
+        }}*/
+}
 export default GoldenBeachesMarbellaProdactScreen;
